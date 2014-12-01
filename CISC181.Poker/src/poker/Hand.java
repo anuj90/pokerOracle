@@ -4,7 +4,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import Annote.GeneratedValue;
+import Annote.Id;
+import Annote.SequenceGenerator;
+
+@Entity
+@Table(name = "PokerResults")
 public class Hand {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "poker")
+	@SequenceGenerator(name = "poker", sequenceName = "poker", allocationSize = 1)
+	
 	private ArrayList<Card> CardsInHand;
 
 	private int HandStrength;

@@ -2,8 +2,11 @@ package poker;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 public class PlayHand {
+	private static SessionFactory factory; 
 
 	public static void main(String[] args) {
 
@@ -35,9 +38,48 @@ public class PlayHand {
 			System.out.print(" Kicker: " + Hands.get(1).getKicker());
 
 			System.out.print("\n");
+			
+			try{
+
+		          factory = new Configuration().
+		                  configure().
+		                  //addPackage("com.xyz") //add package if used.
+		                  addClass(Hand.class).
+		                  buildSessionFactory();
+
+		    	  
+		    	  
+		    	  
+		      }catch (Throwable ex) { 
+		         System.err.println("Failed to create sessionFactory object." + ex);
+		         throw new ExceptionInInitializerError(ex); 
+		      }
+			PlayHand hd = new PlayHand();
+			hd.listHands();
 
 		}
+		 
 
 	}
+	public void listHands(){
+	      Session session = factory.openSession();
+	      Transaction tx = null;
+	      try{
+	         tx = session.beginTransaction();
+	         List hands = session.createQuery("FROM Hands").list(); 
+	         for (Iterator iterator1 = 
+	                           hands.iterator(); iterator1.hasNext();){
+	            Employee Hand = (Employee) iterator1.next(); 
+	           
+
+	         }
+	         tx.commit();
+	      }catch (HibernateException e) {
+	         if (tx!=null) tx.rollback();
+	         e.printStackTrace(); 
+	      }finally {
+	         session.close(); 
+	      }
+	   }
 
 }
